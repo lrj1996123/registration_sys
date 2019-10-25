@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xd.dao.DoctorMapper" >
+  <resultMap id="BaseResultMap" type="com.xd.pojo.Doctor" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="d_name" property="dName" jdbcType="VARCHAR" />
+    <result column="d_group" property="dGroup" jdbcType="VARCHAR" />
+    <result column="d_major" property="dMajor" jdbcType="VARCHAR" />
+    <result column="d_gender" property="dGender" jdbcType="VARCHAR" />
+    <result column="d_tel" property="dTel" jdbcType="VARCHAR" />
+    <result column="d_user" property="dUser" jdbcType="VARCHAR" />
+    <result column="d_pass" property="dPass" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, d_name, d_group, d_major, d_gender, d_tel, d_user, d_pass
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctor
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctor
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xd.pojo.Doctor" >
+    insert into doctor (id, d_name, d_group, 
+      d_major, d_gender, d_tel, 
+      d_user, d_pass)
+    values (#{id,jdbcType=INTEGER}, #{dName,jdbcType=VARCHAR}, #{dGroup,jdbcType=VARCHAR}, 
+      #{dMajor,jdbcType=VARCHAR}, #{dGender,jdbcType=VARCHAR}, #{dTel,jdbcType=VARCHAR}, 
+      #{dUser,jdbcType=VARCHAR}, #{dPass,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xd.pojo.Doctor" >
+    insert into doctor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="dName != null" >
+        d_name,
+      </if>
+      <if test="dGroup != null" >
+        d_group,
+      </if>
+      <if test="dMajor != null" >
+        d_major,
+      </if>
+      <if test="dGender != null" >
+        d_gender,
+      </if>
+      <if test="dTel != null" >
+        d_tel,
+      </if>
+      <if test="dUser != null" >
+        d_user,
+      </if>
+      <if test="dPass != null" >
+        d_pass,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="dName != null" >
+        #{dName,jdbcType=VARCHAR},
+      </if>
+      <if test="dGroup != null" >
+        #{dGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="dMajor != null" >
+        #{dMajor,jdbcType=VARCHAR},
+      </if>
+      <if test="dGender != null" >
+        #{dGender,jdbcType=VARCHAR},
+      </if>
+      <if test="dTel != null" >
+        #{dTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dUser != null" >
+        #{dUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dPass != null" >
+        #{dPass,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xd.pojo.Doctor" >
+    update doctor
+    <set >
+      <if test="dName != null" >
+        d_name = #{dName,jdbcType=VARCHAR},
+      </if>
+      <if test="dGroup != null" >
+        d_group = #{dGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="dMajor != null" >
+        d_major = #{dMajor,jdbcType=VARCHAR},
+      </if>
+      <if test="dGender != null" >
+        d_gender = #{dGender,jdbcType=VARCHAR},
+      </if>
+      <if test="dTel != null" >
+        d_tel = #{dTel,jdbcType=VARCHAR},
+      </if>
+      <if test="dUser != null" >
+        d_user = #{dUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dPass != null" >
+        d_pass = #{dPass,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xd.pojo.Doctor" >
+    update doctor
+    set d_name = #{dName,jdbcType=VARCHAR},
+      d_group = #{dGroup,jdbcType=VARCHAR},
+      d_major = #{dMajor,jdbcType=VARCHAR},
+      d_gender = #{dGender,jdbcType=VARCHAR},
+      d_tel = #{dTel,jdbcType=VARCHAR},
+      d_user = #{dUser,jdbcType=VARCHAR},
+      d_pass = #{dPass,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,20 @@
+.header{
+    background-color: #5FB878;
+    font-family: 微软雅黑;
+    font-size: 45px;
+    color: #F2F2F2;
+    height: 100px;
+}
+.logo{
+    margin-left: 5%;
+    vertical-align: -webkit-baseline-middle;
+}
+.container{
+    margin-top: 2%;
+}
+.operation{
+    margin-bottom: 2%;
+}
+.register-btn{
+    margin-left: 80%;
+}

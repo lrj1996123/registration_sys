@@ -1,0 +1,21 @@
+
+spring:
+  datasource:
+    name: hospital_registration_sys
+    url: jdbc:mysql://127.0.0.1:3306/hospital_registration_sys?serverTimezone=GMT
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
+    static-path-pattern: /**
+mybatis:
+  mapper_locations: mapper/*.xml
+  type-aliases-package: com.xd.poj
+
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8880

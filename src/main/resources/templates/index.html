@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+    <link rel="stylesheet" href="src/css/layui.css"  media="all">
+    <link rel="stylesheet" href="css/main.css"  media="all">
+    <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="layui-header header">
+        <a class="col-xs-11 logo" style="color: #f8f8f8"><i class="fa fa-plus-square" aria-hidden="true"></i> 就诊预约系统</a>
+    </div>
+    <div class="layui-container container">
+        <div class="layui-row operation ">
+            <div class="layui-inline">
+                <label class="layui-form-label">验证日期</label>
+            </div>
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="date">
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">部门</label>
+            </div>
+            <div class="layui-inline">
+                <select name="interest"class="layui-input-block selector" style="margin-left: 0;width: 200px;border-color: #E6E6E6" lay-filter="aihao">
+                    <option value="">请选择预约部门</option>
+                    <option value="内科">内科</option>
+                    <option value="外科">外科</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn search-btn">查询</button>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-danger cancel-btn">取消预约</button>
+            </div>
+        </div>
+        <div id="consult-list">
+        </div>
+    </div>
+    <script type="text/javascript" src="src/layui.js" charset="utf-8"></script>
+    <script>
+        layui.use(['laydate','jquery','layer'], function () {
+            var laydate = layui.laydate;
+            var layer = layui.layer;
+            //单控件
+            laydate.render({
+                elem: '#date'
+                ,isInitValue: false
+                ,format: 'yyyy/MM/dd'
+                ,min: 1
+                ,max: 2
+                ,ready: function(date){
+                    console.log(date);
+                }
+                ,done: function(value, date, endDate){
+                    console.log(value, date, endDate);
+                }
+            });
+            //点击事件
+            $ = layui.jquery;
+            //预约
+            $(document).on('click','.register-btn',function () {
+                layer.prompt({title: '请输入您的手机号',maxlength:11, formType: 0}, function(text, index){
+                    var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+                    if(text.length < 11){
+                        lay.msg("请输入11位手机号");
+                    }else if(text.length == 11){
+                        if(!myreg.test(text)){
+                            layer.msg("手机号格式错误");
+                        }else{
+                            $.ajax({
+                                //请求方式
+                                type : "POST",
+                                url : "register",
+                                //数据，json字符串
+                                data : {
+                                    tel:text,
+                                    c_id:1
+                                },
+                                //请求成功
+                                success : function(result) {
+                                    result = $.parseJSON(result);
+                                    if(result.id != null)
+                                        layer.msg("预约成功,您的就诊号为\n"+result.id);
+                                    else{
+                                        layer.msg(result.message);
+                                    }
+                                },
+                                //请求失败，包含具体的错误信息
+                                error : function(e){
+                                    console.log(e.status);
+                                    console.log(e.responseText);
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            $(document).on('click','.cancel-btn',function () {
+                layer.prompt({title: '请输入您的手机号',maxlength:11, formType: 0}, function(text, index){
+                    var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+                    if(text.length < 11){
+                        lay.msg("请输入11位手机号");
+                    }else if(text.length == 11) {
+                        if (!myreg.test(text)) {
+                            layer.msg("手机号格式错误");
+                        } else {
+                            $.ajax({
+                                //请求方式
+                                type: "POST",
+                                url: "cancel",
+                                //数据，json字符串
+                                data: {
+                                    tel: text,
+                                },
+                                //请求成功
+                                success: function (result) {
+                                    result = $.parseJSON(result);
+                                    layer.msg(result.message);
+                                },
+                                //请求失败，包含具体的错误信息
+                                error: function (e) {
+                                    console.log(e.status);
+                                    console.log(e.responseText);
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            $(document).on('click','.search-btn',function () {
+                var date = $("#date").val();
+                var group = $(".selector").val();
+
+                $.ajax({
+                    //请求方式
+                    type : "POST",
+                    //请求的媒体类型
+                    // contentType: "application/json;charset=UTF-8",
+                    //请求地址
+                    url : "search",
+                    //数据，json字符串
+                    data : {
+                        date:date,
+                        group:group
+                    },
+                    //请求成功
+                    success : function(result) {
+                        $("#consult-list").html("");
+                        var data = $.parseJSON(result);
+                        var row = "<div class=\"layui-row layui-col-space30\"></div>";
+                        for(var i = 0 ;i < data.length; i++) {
+
+                            var col = "                <div class=\"layui-col-md4\" value=\""+data[i].id+"\">\n" +
+                                "                    <div class=\"layui-card\">\n" +
+                                "                        <div class=\"layui-card-header\">"+data[i].dName+"</div>\n" +
+                                "                        <div class=\"layui-card-body\">\n" +
+                                "                            "+data[i].dGroup+"\n" +
+                                "                            <button type=\"button\" class=\"layui-btn register-btn\">预约</button>\n" +
+                                "                        </div>\n" +
+                                "                    </div>\n" +
+                                "                </div>";
+                            if(i % 3 == 0){
+                                $("#consult-list").append(row);
+                            }
+                            var j = parseInt(i/3);
+                            var target = document.getElementsByClassName("layui-col-space30")[j];
+                            target.innerHTML += col;
+                            console.log(target);
+                        }
+                        if($("#consult-list").html() == ""){
+                            layer.msg("抱歉，暂无预约号");
+                        }
+                    },
+                    //请求失败，包含具体的错误信息
+                    error : function(e){
+                        console.log(e.status);
+                        console.log(e.responseText);
+                    }
+                });
+            });
+        });
+
+
+    </script>
+</body>
+</html>
